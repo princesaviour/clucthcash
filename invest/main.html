@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clutch Cash - Investment Platform</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --secondary: #3b82f6;
+        --accent: #60a5fa;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --success: #22c55e;
+        --glass: rgba(255, 255, 255, 0.1);
+        --glass-dark: rgba(0, 0, 0, 0.7);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: var(--light);
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+
+      .dark-mode {
+        --light: #0f172a;
+        --dark: #f8fafc;
+        --glass: rgba(0, 0, 0, 0.2);
+        --glass-dark: rgba(255, 255, 255, 0.05);
+      }
+
+      /* Header Styles */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 800;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo i {
+        color: var(--primary);
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark);
+        font-weight: 500;
+        transition: color 0.3s ease;
+        position: relative;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-login {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+      }
+
+      .btn-signup {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("https://picsum.photos/2000/1000?random=1") center/cover;
+        filter: brightness(0.3);
+        z-index: -1;
+      }
+
+      .hero-content {
+        text-align: center;
+        color: white;
+        max-width: 800px;
+        padding: 2rem;
+        background: var(--glass-dark);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 1s ease;
+      }
+
+      .hero-title {
+        font-size: clamp(2rem, 5vw, 4rem);
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, var(--accent), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-subtitle {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      /* Benefits Section */
+      .benefits {
+        padding: 5rem 2rem;
+        background: var(--light);
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 3rem;
+        color: var(--dark);
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .benefit-card {
+        padding: 2rem;
+        border-radius: 20px;
+        background: var(--light);
+        box-shadow: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+        transition: transform 0.3s ease;
+      }
+
+      .benefit-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .benefit-icon {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+
+      .benefit-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--dark);
+      }
+
+      .benefit-text {
+        color: var(--dark);
+        opacity: 0.8;
+        line-height: 1.6;
+      }
+
+      /* Investment Plans */
+      .plans {
+        padding: 5rem 2rem;
+        background: linear-gradient(45deg, var(--primary), var(--secondary));
+        color: white;
+      }
+
+      .plans-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .plan-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .plan-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .plan-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .plan-price {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      .plan-features {
+        list-style: none;
+        margin-bottom: 2rem;
+      }
+
+      .plan-features li {
+        margin: 0.5rem 0;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero-content {
+          padding: 1rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+        }
+
+        .benefits-grid,
+        .plans-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links.active {
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 80px;
+          right: 0;
+          width: 100%;
+          height: calc(100vh - 80px);
+          background: var(--light);
+          padding: 2rem;
+          transition: right 0.3s ease;
+        }
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .hamburger span {
+        width: 30px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 80px;
+          right: -100%;
+          width: 100%;
+          height: calc(100vh - 80px);
+          background: var(--light);
+          flex-direction: column;
+          padding: 2rem;
+          transition: right 0.3s ease;
+        }
+
+        .nav-links.active {
+          right: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav class="nav-container">
+        <div class="logo">
+          <i class="fas fa-cog"></i>
+          Clutch Cash
+        </div>
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="reason.html">Why Invest?</a>
+          <a href="#plans">Investment Plans</a>
+          <a href="contact.html">Contact</a>
+          <div class="auth-buttons">
+            <button class="btn btn-login">Login</button>
+            <button class="btn btn-signup">Sign Up</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="hero-content" data-aos="fade-up">
+        <h1 class="hero-title">Invest in the Future of Car Parts</h1>
+        <p class="hero-subtitle">
+          Revolutionizing the Car Parts Industry with Profitable Investments
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-signup">Start Investing</button>
+          <button class="btn btn-login">Learn More</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits" id="why-invest">
+      <h2 class="section-title">Why Choose Clutch Cash?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card" data-aos="fade-up">
+          <i class="fas fa-chart-line benefit-icon"></i>
+          <h3 class="benefit-title">High ROI on Car Parts</h3>
+          <p class="benefit-text">
+            Experience exceptional returns on investment through our carefully
+            curated car parts portfolio.
+          </p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="200">
+          <i class="fas fa-cogs benefit-icon"></i>
+          <h3 class="benefit-title">Industry Expertise</h3>
+          <p class="benefit-text">
+            Benefit from our deep industry knowledge and innovative approach to
+            car parts investment.
+          </p>
+        </div>
+        <div class="benefit-card" data-aos="fade-up" data-aos-delay="400">
+          <i class="fas fa-shield-alt benefit-icon"></i>
+          <h3 class="benefit-title">Secure Investment</h3>
+          <p class="benefit-text">
+            Your investments are protected by state-of-the-art security measures
+            and transparent operations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="plans" id="plans">
+      <h2 class="section-title">Investment Plans</h2>
+      <div class="plans-grid">
+        <div class="plan-card" data-aos="fade-up">
+          <h3 class="plan-title">Basic Plan</h3>
+          <div class="plan-price">$100</div>
+          <ul class="plan-features">
+            <li>5% Monthly Returns</li>
+            <li>24/7 Support</li>
+            <li>Real-time Analytics</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="plan-title">Premium Plan</h3>
+          <div class="plan-price">$500</div>
+          <ul class="plan-features">
+            <li>7% Monthly Returns</li>
+            <li>Priority Support</li>
+            <li>Advanced Analytics</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">Enterprise Plan</h3>
+          <div class="plan-price">$1000</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">premium Plan</h3>
+          <div class="plan-price">$10</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">Enterprise Plan</h3>
+          <div class="plan-price">$60</div>
+          <ul class="plan-features">
+            <li>90% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">Master Plan</h3>
+          <div class="plan-price">$600</div>
+          <ul class="plan-features">
+            <li>100% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">Legendary Plan</h3>
+          <div class="plan-price">$200</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">Enterprise Plan</h3>
+          <div class="plan-price">$3000</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">mega Plan</h3>
+          <div class="plan-price">$400</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">mini Plan</h3>
+          <div class="plan-price">$20</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">quater Plan</h3>
+          <div class="plan-price">$5</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+
+        <div class="plan-card" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="plan-title">bonus Plan</h3>
+          <div class="plan-price">$120</div>
+          <ul class="plan-features">
+            <li>10% Monthly Returns</li>
+            <li>VIP Support</li>
+            <li>Premium Features</li>
+          </ul>
+          <button class="btn btn-signup">Invest Now</button>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        once: true,
+      });
+
+      // Mobile Menu Toggle
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+
+      // Header Scroll Effect
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 100) {
+          header.style.background = "rgba(255, 255, 255, 0.98)";
+          header.style.boxShadow = "0 4px 30px rgba(0, 0, 0, 0.1)";
+        } else {
+          header.style.background = "rgba(255, 255, 255, 0.95)";
+          header.style.boxShadow = "none";
+        }
+      });
+    </script>
+  </body>
+</html>
